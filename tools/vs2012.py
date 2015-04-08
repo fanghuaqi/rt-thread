@@ -1,3 +1,27 @@
+#
+# File      : vs2012.py
+# This file is part of RT-Thread RTOS
+# COPYRIGHT (C) 2006 - 2015, RT-Thread Development Team
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License along
+#  with this program; if not, write to the Free Software Foundation, Inc.,
+#  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+# Change Logs:
+# Date           Author       Notes
+# 2015-01-20     Bernard      Add copyright information
+#
+
 import os
 import sys
 import string
@@ -75,11 +99,14 @@ def VS_add_ItemGroup(parent, file_type, files, project_path):
         name = fn.name
         path = os.path.dirname(fn.abspath)
 
-        path = _make_path_relative(project_path, path)
+        objpath = path = _make_path_relative(project_path, path)
         path = os.path.join(path, name)
 
         File = SubElement(ItemGroup, item_tag)
         File.set('Include', path.decode(fs_encoding))
+        if file_type == 'C' :
+            ObjName = SubElement(File, 'ObjectFileName')
+            ObjName.text = ''.join('$(IntDir)'+objpath+'\\')
 
 def VS_add_HeadFiles(program, elem, project_path):
     building.source_ext = []
