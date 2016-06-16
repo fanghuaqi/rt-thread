@@ -44,7 +44,7 @@ extern rt_list_t rt_thread_priority_table[RT_THREAD_PRIORITY_MAX];
 extern struct rt_thread *rt_current_thread;
 extern rt_list_t rt_thread_defunct;
 
-static void rt_thread_exit(void)
+void rt_thread_exit(void)
 {
     struct rt_thread *thread;
     register rt_base_t level;
@@ -98,7 +98,7 @@ static rt_err_t _rt_thread_init(struct rt_thread *thread,
 
     /* stack init */
     thread->stack_addr = stack_start;
-    thread->stack_size = (rt_uint16_t)stack_size;
+    thread->stack_size = stack_size;
 
     /* init thread stack */
     rt_memset(thread->stack_addr, '#', thread->stack_size);
@@ -331,7 +331,7 @@ RTM_EXPORT(rt_thread_create);
 
 /**
  * This function will delete a thread. The thread object will be removed from
- * thread queue and detached/deleted from system object management.
+ * thread queue and deleted from system object management in the idle thread.
  *
  * @param thread the thread to be deleted
  *
